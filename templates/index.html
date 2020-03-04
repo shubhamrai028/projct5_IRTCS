@@ -1,0 +1,70 @@
+
+{% load staticfiles %}<html>
+<body>
+<table align="center" border="2">
+    <tr><th><h1>SEARCH TRAINS</h1></th></tr>
+    <tr><th>
+        <form action="{% url 'train' %}" method="post">
+            {% csrf_token %}
+        <input type="text" placeholder="train name" name="train_search" required>
+        <button type="submit">search</button>
+        </form>
+    </th></tr>
+</table>
+
+{% if data %}
+        <table align="center" border="2" style="background-color: orange">
+            <tr>
+                <th colspan="2"><h1>Train Information</h1></th>
+            </tr>
+
+            {% for x in data %}
+                {% for k,v in x.items %}
+                    <tr>
+                        {% if k == "data" %}
+                              <th></th>
+                            <th>
+                                <table align="center" border="2" style="background-color: yellow">
+                            {% for i,j in v.items %}
+                                <tr>
+                                    {% if i == "days" %}
+                                        <th>Available On</th>
+                                        <th>
+                                            <table align="center" border="2" style="background-color:white">
+                                                <tr><th>Mon</th> <th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th></tr>
+                                                <tr>
+                                                    {% for a,b in j.items %}
+                                                        <th>
+                                                            {% if b != '0' %}
+                                                                <img src="{% static 'images/correct.png' %}">
+                                                            {% else %}
+                                                                <img src="{% static 'images/wrong.png' %}">
+                                                            {% endif %}
+                                                        </th>
+                                                    {% endfor %}
+                                                </tr>
+                                            </table>
+                                        </th>
+                                    {% else %}
+                                    <th>{{ i }}</th> <th>{{ j }}</th>
+                                    {% endif %}
+                                </tr>
+                            {% endfor %}
+                                </table>
+                            </th>
+
+                            {% else %}
+                            <th>{{ k }}</th> <th>{{ v }}</th>
+
+                        {% endif %}
+                    </tr>
+                 {% endfor %}
+
+            {% endfor %}
+
+        </table>
+    {% endif %}
+
+
+    </body>
+</html>
